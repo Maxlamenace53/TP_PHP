@@ -85,4 +85,22 @@ class CommentRepository extends AbstractRepository
             ]);
     }
 
+    /**
+     * @param int $commentId
+     * @return User|bool
+     */
+    public function findUserComment(int $commentId):User|bool
+    {
+        $sql = "SELECT * FROM user
+JOIN commentaire on commentaire.idUser = user.id
+WHERE commentaire.id = :commentId ";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([
+            'commentId' => $commentId
+        ]);
+
+        return $statement->fetchObject(User::class);
+
+    }
+
 }

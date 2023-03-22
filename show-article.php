@@ -86,9 +86,12 @@ $auteur = $userRepository->getById($articleToShow->getUserId());
 
 
             <div class="user-comment">
-                <?php foreach ($commentsToShow as $commentToShow):?>
-                    <p class="article-comment"> <?= $commentToShow->getCommentaire()  ?> </p>
-                    <span>Rédigé par : <?= $auteur->getNom() . ' ' . $auteur->getPrenom() ?></span>
+                <?php foreach ($commentsToShow as $commentToShow): ?>
+                    <p class="article-comment"> <?= ucfirst($commentToShow->getCommentaire()) ?> </p>
+                    <span>Rédigé par
+                        <?= strtoupper($commentRepository->findUserComment($commentToShow->getId())->getNom()) . ' '
+                        . ucfirst($commentRepository->findUserComment($commentToShow->getId())->getPrenom())
+                        ?>    </span>
                 <?php endforeach; ?>
             </div>
         </div>

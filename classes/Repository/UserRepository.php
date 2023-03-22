@@ -46,4 +46,7 @@ class UserRepository extends AbstractRepository
         ]);
         return $query->fetchObject(User::class);
     }
+
+
 }
+
