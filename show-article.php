@@ -8,10 +8,21 @@ require_once('classes/Comment.php');
 require_once('classes/Repository/CommentRepository.php');
 
 $user = User::isLogged();
+const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
+const ERROR_COMMENT_TOO_SHORT = 'Le commentaire est trop court';
+const ERROR_COMMENT_TOO_LONG = 'Le commentaire est trop long';
+
+if($user === false) {
+    header('Location: login.php');
+}
+
 
 $articleRepository = new ArticleRepository();
 $userRepository = new UserRepository();
 $commentRepository = new CommentRepository();
+$erreurs = [];
+$comment = new Comment();
+
 
 //Si le paramètre id n'existe pas
 if (!isset($_GET['id'])) {
@@ -26,10 +37,7 @@ $articleToShow = $articleRepository->findArticle($articleId);
 //Récupération des commentaires lié à l'article
 $commentsToShow = $commentRepository->findCommentByArticle($articleId);
 
-// on vérifie avec un var-dump
-//echo '<pre>';
-//var_dump($commentsToShow);
-//echo '</pre>';
+
 
 //Si aucun article ne correspond dans la liste
 if ($articleToShow === false) {
@@ -37,7 +45,23 @@ if ($articleToShow === false) {
 }
 
 $auteur = $userRepository->getById($articleToShow->getUserId());
-/*$auteurComment = $commentRepository ->*/
+
+
+
+
+
+
+$comment->setComment(htmlentities($_POST['comment']));
+$comment->setUserId(htmlentities($user->getId()));
+$comment->setArticleId(htmlentities($articleId));
+
+echo '<pre>';
+var_dump($comment);
+echo '</pre>';
+
+
+$commentRepository->addComment($comment);
+
 
 
 ?>
@@ -70,28 +94,50 @@ $auteur = $userRepository->getById($articleToShow->getUserId());
                     <a class="btn btn-secondary" href="/delete-article.php?id=<?= $articleId ?>">Supprimer</a>
                     <a class="btn btn-primary" href="/form-article.php?id=<?= $articleId ?>">Editer l'article</a>
                 </div>
-                <div>
-                    <form action="#" name="comment">
-                        <label for="comment">Nouveau commentaire</label>
-                        <textarea class="texarea-comment" minlength="10" maxlength="500" required enabled
-                                  placeholder="Veuillez écrire votre commentaire">
 
-                </textarea>
-                        <button type="submit">Envoyé</button>
-                    </form>
-
-
-                </div>
             <?php endif; ?>
 
 
             <div class="user-comment">
-                <?php foreach ($commentsToShow as $commentToShow): ?>
-                    <p class="article-comment"> <?= ucfirst($commentToShow->getCommentaire()) ?> </p>
+                <div>
+                    <form action="#"  method="POST" >
+                    <textarea name="comment" class="texarea-comment" minlength="10" maxlength="500"
+                              required <?= $user ? 'enabled' : 'disabled' ?>
+                              placeholder="Veuillez écrire votre commentaire">
+
+                     </textarea>
+                        <?php if ($user !== false): ?>
+                            <button type="submit">Soumettre</button>
+                        <?php else: ?>
+                            <span>Veuillez vous connecter pour commenter !</span>
+                        <?php endif; ?>
+
+                    </form>
+
+
+                </div>
+
+
+                <?php foreach ($commentsToShow as $commentToShow):
+                    $auteurComment = $commentRepository->findUserComment($commentToShow->getId());
+                    ?>
+                    <p class="article-comment"> <?= ucfirst($commentToShow->getComment()) ?>
+
+
+                    <?php if ($user !== false && ($user->getEmail()=== $auteurComment->getEmail())): ?>
+
+                    <form action='#' method="post">
+                        <div>
+                            <button>Modifier</button>
+                            <button>Supprimer</button>
+                        </div>
+                    </form>
+                   <?php endif; ?>
+                    </p>
                     <span>Rédigé par
-                        <?= strtoupper($commentRepository->findUserComment($commentToShow->getId())->getNom()) . ' '
-                        . ucfirst($commentRepository->findUserComment($commentToShow->getId())->getPrenom())
-                        ?>    </span>
+                        <?= strtoupper($auteurComment->getNom()) . ' ' . ucfirst($auteurComment->getPrenom()) ?>
+
+                    </span>
                 <?php endforeach; ?>
             </div>
         </div>

@@ -1,5 +1,6 @@
 <?php
 require_once('AbstractRepository.php');
+require_once('UserRepository.php');
 
 class CommentRepository extends AbstractRepository
 {
@@ -24,10 +25,10 @@ class CommentRepository extends AbstractRepository
 
     public function findCommentByArticle(int $articleId): array
     {
-        $sql = "SELECT * FROM commentaire WHERE idArticle = :idArticle";
+        $sql = "SELECT * FROM commentaire WHERE articleId = :articleId";
         $statement = $this->db->prepare($sql);
         $statement->execute([
-            'idArticle' => $articleId
+            'articleId' => $articleId
         ]);
 
         return @$statement->fetchAll(PDO::FETCH_CLASS, Comment::class);
@@ -41,7 +42,7 @@ class CommentRepository extends AbstractRepository
      */
     public function findCommentByUser(int $userId): Comment|bool
     {
-        $sql = "SELECT * FROM commentaire WHERE idUser = :id";
+        $sql = "SELECT * FROM commentaire WHERE userId = :id";
         $statement = $this->db->prepare($sql);
         $statement->execute([
             'id' => $userId
@@ -49,7 +50,6 @@ class CommentRepository extends AbstractRepository
 
         return $statement->fetchObject(Comment::class);
     }
-
 
 
     public function deleteComment(int $commentId): void
@@ -67,33 +67,33 @@ class CommentRepository extends AbstractRepository
                WHERE id = :id";
         $query = $this->db->prepare($sql);
         $query->execute([
-            'id'=>$comment->getId(),
-            'comment'=> $comment->getComment()
+            'id' => $comment->getId(),
+            'comment' => $comment->getComment()
 
-            ]);
+        ]);
     }
 
-    public function addComment ( Comment $comment)
+    public function addComment(Comment $comment)
     {
-        $sql = "INSERT INTO commentaire (commentaire, idUser,idArticle )
-            VALUES (:commentaire, :idUser, :idArticle)";
+        $sql = "INSERT INTO commentaire (commentaire,userId,articleId)
+            VALUES (:commentaire,:userId,:articleId)";
         $query = $this->db->prepare($sql);
         $query->execute([
-            'commentaire'=>$comment->getComment(),
-            'idUser'=>$comment->getUserId(),
-            'idArticle' =>$comment->getArticleId()
-            ]);
+            'commentaire' => $comment->GetComment(),
+            'userId' => $comment->GetUserId(),
+            'articleId' => $comment->GetArticleId()
+        ]);
     }
 
     /**
      * @param int $commentId
      * @return User|bool
      */
-    public function findUserComment(int $commentId):User|bool
+    public function findUserComment(int $commentId): User|bool
     {
         $sql = "SELECT * FROM user
-JOIN commentaire on commentaire.idUser = user.id
-WHERE commentaire.id = :commentId ";
+        JOIN commentaire on commentaire.userId = user.id
+        WHERE commentaire.id = :commentId ";
         $statement = $this->db->prepare($sql);
         $statement->execute([
             'commentId' => $commentId

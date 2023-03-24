@@ -1,5 +1,13 @@
+<?php
+require_once('classes/User.php');
+require_once('classes/Repository/UserRepository.php');
+?>
 <header>
-    <a href="/" class="logo">Blog</a>
+    <a href="/" class="logo">Blog de
+        <?php if (isset($_SESSION['user'])):?>
+
+        <?php endif ?>
+        </a>
     <ul class="header-menu">
         <?php if(isset($_SESSION['user'])): ?>
         <li class=<?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>

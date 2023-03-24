@@ -27,7 +27,7 @@ class Comment
     /**
      * @return string
      */
-    public function getCommentaire(): string
+    public function getComment(): string
     {
         return $this->commentaire;
     }
@@ -35,7 +35,7 @@ class Comment
     /**
      * @param string $commentaire
      */
-    public function setCommentaire(string $commentaire): void
+    public function setComment(string $commentaire): void
     {
         $this->commentaire = $commentaire;
     }

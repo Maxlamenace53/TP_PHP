@@ -21,6 +21,10 @@ $erreurs = [];
 $articleRepository = new ArticleRepository();
 $article = new Article();
 
+
+
+
+
 //Est-ce que je suis dans le cas d'une modification
 if (isset($_GET['id'])) {
     $articleId = $_GET['id'];
