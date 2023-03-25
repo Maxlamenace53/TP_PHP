@@ -8,26 +8,25 @@ require_once('classes/Comment.php');
 require_once('classes/Repository/CommentRepository.php');
 
 $user = User::isLogged();
+
+/*if($user === false) {
+    header('Location: login.php');
+}*/
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_COMMENT_TOO_SHORT = 'Le commentaire est trop court';
 const ERROR_COMMENT_TOO_LONG = 'Le commentaire est trop long';
 
-if($user === false) {
-    header('Location: login.php');
-}
-
-
+$errors = [];
 $articleRepository = new ArticleRepository();
 $userRepository = new UserRepository();
 $commentRepository = new CommentRepository();
-$erreurs = [];
-$comment = new Comment();
 
 
-//Si le paramètre id n'existe pas
+
+/*//Si le paramètre id n'existe pas
 if (!isset($_GET['id'])) {
     header('Location: index.php');
-}
+}*/
 
 //On récupère l'id de l'article qu'on a dans l'url
 $articleId = $_GET['id'];
@@ -41,26 +40,23 @@ $commentsToShow = $commentRepository->findCommentByArticle($articleId);
 
 //Si aucun article ne correspond dans la liste
 if ($articleToShow === false) {
-    header('Location: index.php');
+    header('Location: show-article.php?id='.$articleId);
 }
+
+
 
 $auteur = $userRepository->getById($articleToShow->getUserId());
 
+//Création du commentaire
 
 
 
 
-
-$comment->setComment(htmlentities($_POST['comment']));
-$comment->setUserId(htmlentities($user->getId()));
-$comment->setArticleId(htmlentities($articleId));
-
-echo '<pre>';
+/*echo '<pre>';
 var_dump($comment);
-echo '</pre>';
+echo '</pre>';*/
 
 
-$commentRepository->addComment($comment);
 
 
 
@@ -100,12 +96,13 @@ $commentRepository->addComment($comment);
 
             <div class="user-comment">
                 <div>
-                    <form action="#"  method="POST" >
-                    <textarea name="comment" class="texarea-comment" minlength="10" maxlength="500"
+                    <form action="comment.php" method="POST" >
+                    <textarea name="comment" class="texarea-comment"
                               required <?= $user ? 'enabled' : 'disabled' ?>
                               placeholder="Veuillez écrire votre commentaire">
 
                      </textarea>
+                        <input type="hidden" name="articleId" value="<?= $articleId ?>">
                         <?php if ($user !== false): ?>
                             <button type="submit">Soumettre</button>
                         <?php else: ?>
@@ -126,10 +123,10 @@ $commentRepository->addComment($comment);
 
                     <?php if ($user !== false && ($user->getEmail()=== $auteurComment->getEmail())): ?>
 
-                    <form action='#' method="post">
-                        <div>
-                            <button>Modifier</button>
-                            <button>Supprimer</button>
+                    <form action='comment.php' method="post">
+                        <div class="action">
+                            <a class="btn btn-secondary" href="/delete-comment.php?id=<?= $articleId ?>&comment=<?= $commentToShow->getId() ?>">Supprimer</a>
+                            <a class="btn btn-primary" href="/edit-comment.php?id=<?= $articleId ?>&comment=<?= $commentToShow->getId() ?>">Editer le commentaire</a>
                         </div>
                     </form>
                    <?php endif; ?>

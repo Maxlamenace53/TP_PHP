@@ -41,10 +41,7 @@
     padding :2rem;
     margin-top: 2rem ;
 }
-.texarea-comment{
-    width: 50rem;
-    height: 10rem;
-}
+
 
 form{
     display: flex;
