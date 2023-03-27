@@ -36,16 +36,32 @@ class CommentRepository extends AbstractRepository
 
 
     /**
-     * @param int $userId
-     *
+     * @param int $articleId
+     * @param string $comment
      * @return Comment|bool
      */
-    public function findCommentByUser(int $userId): Comment|bool
+    public function findComment(int $articleId, string $comment): Comment|bool
     {
-        $sql = "SELECT * FROM commentaire WHERE userId = :id";
+        $sql = "SELECT * FROM commentaire WHERE articleId = :articleId AND commentaire = :commentaire";
         $statement = $this->db->prepare($sql);
         $statement->execute([
-            'id' => $userId
+            'articleId' => $articleId,
+            'commentaire'=>$comment
+        ]);
+
+        return $statement->fetchObject(Comment::class);
+    }
+
+    /**
+     * @param int $CommentId
+     * @return Comment|bool
+     */
+    public function findCommentById(int $CommentId):Comment|bool
+    {
+        $sql = "SELECT commentaire FROM commentaire WHERE id = :id";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([
+            'id' => $CommentId
         ]);
 
         return $statement->fetchObject(Comment::class);
@@ -61,14 +77,19 @@ class CommentRepository extends AbstractRepository
         ]);
     }
 
+
+
+
+
+
     public function editComment(Comment $comment)
     {
         $sql = "UPDATE commentaire SET commentaire = :comment 
-               WHERE id = :id";
+               WHERE articleId = :articleId AND WHERE commentaire = :commentaire ";
         $query = $this->db->prepare($sql);
         $query->execute([
-            'id' => $comment->getId(),
-            'comment' => $comment->getComment()
+            'articleId' => $comment->getArticleId(),
+            'commentaire' => $comment->getComment()
 
         ]);
     }

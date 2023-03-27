@@ -4,7 +4,7 @@ require_once('classes/User.php');
 require_once('classes/Repository/UserRepository.php');
 
 $user = new User();
-$userRepository = new UserRepository();
+$userRepository = new  UserRepository();
 $errors = [];
 
 if(!empty($_POST)) {
@@ -73,10 +73,11 @@ if(!empty($_POST)) {
     <div class="content">
         <div class="block p-20 form-container">
             <h1>Inscription</h1>
-            <form action="#" , method="POST">
+            <form action="#" method="POST">
                 <div class="form-control">
                     <label for="firstname">Prénom</label>
-                    <input type="text" name="firstname" id="firstname" value="<?= $user->getPrenom() ?>">
+
+                    <input type="text" name="firstname" id="firstname" value="<?= $user->getPrenom()?>">
                 </div>
                 <?php if (isset($errors['firstname'])) : ?>
                     <p class="text-danger"><?= $errors['firstname'] ?></p>

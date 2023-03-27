@@ -49,3 +49,21 @@ form{
     gap: 10px;
 
 }
+.article-comment{
+    letter-spacing: 1px;
+    padding: 15px;
+    max-width: 100%;
+    line-height: 1;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+.texarea-comment{
+    letter-spacing: 1px;
+    padding: 8px;
+    max-width: 100%;
+    line-height: 1;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}

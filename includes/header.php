@@ -1,9 +1,10 @@
-<?php
-require_once('classes/User.php');
-require_once('classes/Repository/UserRepository.php');
-?>
+
+
 <header>
-    <a href="/" class="logo">Blog de
+    <?php if(!empty($user)): ?>
+    <?='Bienvenue '.$user->getPrenom().' '.$user->getNom().', vous voila connecter !'?>
+    <?php endif; ?>
+    <a href="/" class="logo">Blog
         <?php if (isset($_SESSION['user'])):?>
 
         <?php endif ?>

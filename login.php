@@ -7,6 +7,7 @@ $userRepository = new UserRepository();
 $errors = [];
 $email = '';
 $password = '';
+$articleId = $_POST["articleId"]??'';
 
 if(!empty($_POST)) {
     $email = $_POST['email'];
@@ -26,6 +27,7 @@ if(!empty($_POST)) {
     $user = $userRepository->getByEmailAndPassword($email, $password);
     if($user !== false) {
         $_SESSION['user'] = serialize($user);
+
         header('Location: index.php');
     }
 

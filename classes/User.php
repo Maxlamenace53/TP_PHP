@@ -3,10 +3,10 @@
 class User
 {
     private int $id;
-    private string $prenom = '';
+    private string $prenom ='';
 
-    private string $nom = '';
-    private string $email = '';
+    private string $nom ='';
+    private string $email ='';
     private string $password;
 
     /**
@@ -88,6 +88,8 @@ class User
     {
         $this->password = $password;
     }
+
+
 
     public static function isLogged(): User|bool
     {

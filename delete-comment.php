@@ -28,7 +28,7 @@ if($user === false) {
 
 $commentRepository->deleteComment($commentId);
 
-header('location:show-article.php?id=' . $articleId);
+header('location:show-article.php?id=' . $articleId.'#comment');
 
 
 

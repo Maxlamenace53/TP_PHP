@@ -8,6 +8,7 @@
     $userRepository = new UserRepository();
     $articleRepository = new ArticleRepository();
     $articles = $articleRepository->getArticles();
+    $user = User::isLogged();
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
 <head>
     <?php require_once 'includes/head.php' ?>
     <link rel="stylesheet" href="public/css/index.css">
-    <title>Blog</title>
+    <title>Blog <?= User::isLogged()?'de '.$user->getPrenom():''; ?> </title>
 </head>
 
 <body>
@@ -32,7 +33,7 @@
                             <div class="img-container" style="background-image:url('<?= $article->getImageFullPath() ?>')"></div>
                         </div>
                         <h3><?= $article->getTitle() ?></h3>
-                        <span>Rédigé par : <?= $auteur->getNom() . ' ' . $auteur->getPrenom() ?></span>
+                        <span>Rédigé par : <?= $auteur->getPrenom() . ' ' . $auteur->getNom() ?></span>
                     </a>
                     <?php endforeach; ?>
             </div>
