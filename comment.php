@@ -17,10 +17,12 @@ $user = User::isLogged();
 $comment = new Comment();
 $articleId = $_POST["articleId"];
 
+if(isset($_POST['comment'])&&!empty($_POST['comment'])){
 
-$comment->setComment(htmlentities($_POST['comment']));
-$comment->setUserId(htmlentities($user->getId()));
-$comment->setArticleId(htmlentities($articleId));
+    $comment->setComment(htmlentities($_POST['comment']));
+    $comment->setUserId(htmlentities($user->getId()));
+    $comment->setArticleId(htmlentities($articleId));
+}
 
 
 $commentRepository->addComment($comment);
